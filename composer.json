@@ -1,5 +1,5 @@
 {
-    "name": "elic/staades-sdk-php",
+    "name": "elic-dev/staades-sdk-php",
     "description": "A PHP library to send metrics to staades.net",
     "type": "library",
     "license": "MIT",
