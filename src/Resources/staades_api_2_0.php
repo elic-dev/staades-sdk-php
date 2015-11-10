@@ -27,7 +27,7 @@ return array(
                 'value'          => array(
                     'location'    => 'query',
                     'description' => 'The value',
-                    'type'        => 'string',
+                    'type'        => 'any',
                     'required'    => true,
                 ),
             ),
@@ -56,7 +56,7 @@ return array(
                 'value'          => array(
                     'location'    => 'query',
                     'description' => 'The value',
-                    'type'        => 'string',
+                    'type'        => 'any',
                     'required'    => true,
                 ),
             ),
