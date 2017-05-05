@@ -1,9 +1,11 @@
-<?php namespace Staades\Tests\Client;
+<?php
 
+namespace Staades\Tests\Client;
+
+use PHPUnit\Framework\TestCase;
 use Staades\StaadesClient;
-use Guzzle\Tests\GuzzleTestCase;
 
-class StaadesTestClient extends GuzzleTestCase
+class StaadesTestClient extends TestCase
 {
     /**
      * Check that a Staades Client is instantiated properly
@@ -12,14 +14,13 @@ class StaadesTestClient extends GuzzleTestCase
     {
         $config = array(
             'app_key' => 'testapp',
-            'api_key' => 'testapi'
+            'api_key' => 'testapi',
         );
 
         $client = StaadesClient::factory($config);
-        
-        //Check that the Client is of the right type
-        $this->assertInstanceOf('\Guzzle\Service\Client', $client);
-        $this->assertInstanceOf('\Staades\StaadesClient', $client);
 
+        //Check that the Client is of the right type
+        $this->assertInstanceOf(\GuzzleHttp\Command\Guzzle\GuzzleClient::class, $client);
+        $this->assertInstanceOf(\Staades\StaadesClient::class, $client);
     }
 }

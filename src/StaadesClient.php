@@ -1,12 +1,16 @@
-<?php namespace Staades;
+<?php
 
-use Guzzle\Common\Collection;
-use Guzzle\Service\Client;
-use Guzzle\Service\Description\ServiceDescription;
+namespace Staades;
 
-class StaadesClient extends Client
+use GuzzleHttp\Client;
+use GuzzleHttp\Command\Guzzle\Description;
+use GuzzleHttp\Command\Guzzle\GuzzleClient;
+use Guzzle\Service\Loader\PhpLoader;
+use Symfony\Component\Config\FileLocator;
+
+class StaadesClient extends GuzzleClient
 {
-	/**
+    /**
      * Factory to create new instance.
      *
      * @param array $config
@@ -15,68 +19,71 @@ class StaadesClient extends Client
      */
     public static function factory($config = array())
     {
-    	// Provide a hash of default client configuration options
-        $default = array(
-        	'base_url' => 'http://api.staades.net/{version}/',
-            'version'  => '2.0',
-        );
+        $client = new Client([
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
 
-        // The following values are required when creating the client
-        $required = array(
-            'base_url',
-            'app_key',
-            'api_key'
-        );
+        $configDirectories = array(__DIR__ . "/Resources");
+        $locator = new FileLocator($configDirectories);
+        $phpLoader = new PhpLoader($locator);
+        $description = $phpLoader->load($locator->locate('staades_api_2_0.php'));
 
-        // Merge in default settings and validate the config
-        $config = Collection::fromConfig($config, $default, $required);
+        $description = new Description($description);
 
         // Create a new Staades client
-        $client = new self($config->get('base_url'), $config);
+        $guzzleClient = new self($client, $description, null, null, null, $config);
 
-        $file = 'staades_api_2_0.php';
-        $client->setDescription(ServiceDescription::factory(__DIR__ . "/Resources/{$file}"));
-
-        // Set the content type header to use "application/json" for all requests
-        $client->setDefaultOption('headers', array('Content-Type' => 'application/json'));
-
-        return $client;
+        return $guzzleClient;
     }
 
+    /**
+     * Proxy the getValues command
+     *
+     * @param  string $identKey
+     * @return array
+     */
+    public function getValues($identKey)
+    {
+        return $this->appIdentValuesGet([
+            'ident_key' => $identKey,
+            'app_key' => $this->getConfig('app_key'),
+            'apikey' => $this->getConfig('api_key'),
+        ])['data'];
+    }
 
     /**
      * Proxy the addEvent command (to be used as a shortcut)
      *
-     * @param  string $collection Name of the collection to store events
-     * @param  array  $event      Event data to store
+     * @param  string $identKey   Name of the ident to store events
+     * @param  array  $value      Value to be added to the ident
      * @return mixed
      */
     public function addValue($identKey, $value)
     {
-        return $this->getCommand('appIdentValueAdd', array(
+        return $this->appIdentValueAdd([
             'ident_key' => $identKey,
-            'value'     => $value,
+            'value' => $value,
             'app_key' => $this->getConfig('app_key'),
-            'apikey'  => $this->getConfig('api_key'),
-
-        ))->getResult();
+            'apikey' => $this->getConfig('api_key'),
+        ])['data'];
     }
 
     /**
      * Proxy the addEvent command (to be used as a shortcut)
      *
-     * @param  string $collection Name of the collection to store events
-     * @param  array  $event      Event data to store
+     * @param  string $identKey   Name of the ident to store events
+     * @param  array  $value      Value to set the ident to
      * @return mixed
      */
     public function setValue($identKey, $value)
     {
-        return $this->getCommand('appIdentValueSet', array(
+        return $this->appIdentValueSet([
             'ident_key' => $identKey,
-            'value'     => $value,
+            'value' => $value,
             'app_key' => $this->getConfig('app_key'),
-            'apikey'  => $this->getConfig('api_key'),
-
-        ))->getResult();
+            'apikey' => $this->getConfig('api_key'),
+        ]);
     }
 }
