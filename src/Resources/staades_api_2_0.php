@@ -84,6 +84,12 @@ return array(
                     'type' => 'any',
                     'required' => true,
                 ),
+                'date' => array(
+                    'location' => 'query',
+                    'description' => 'An optional date time',
+                    'type' => 'any',
+                    'required' => false,
+                ),
             ),
         ),
     ),

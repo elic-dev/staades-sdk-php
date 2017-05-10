@@ -2,6 +2,7 @@
 
 namespace Staades;
 
+use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\Command\Guzzle\Description;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
@@ -77,11 +78,12 @@ class StaadesClient extends GuzzleClient
      * @param  array  $value      Value to set the ident to
      * @return mixed
      */
-    public function setValue($identKey, $value)
+    public function setValue($identKey, $value, DateTime $date = null)
     {
         return $this->appIdentValueSet([
             'ident_key' => $identKey,
             'value' => $value,
+            'date' => $date ? $date->format(\DateTime::ATOM) : null,
             'app_key' => $this->getConfig('app_key'),
             'apikey' => $this->getConfig('api_key'),
         ]);
