@@ -53,7 +53,7 @@ return array(
                     'location' => 'query',
                     'description' => 'The value',
                     'type' => 'any',
-                    'required' => true,
+                    'required' => false,
                 ),
             ),
         ),
@@ -82,7 +82,7 @@ return array(
                     'location' => 'query',
                     'description' => 'The value',
                     'type' => 'any',
-                    'required' => true,
+                    'required' => false,
                 ),
                 'date' => array(
                     'location' => 'query',
