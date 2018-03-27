@@ -2,7 +2,7 @@
 return array(
     'name' => 'Staades',
     'apiVersion' => '2.0',
-    'baseUrl' => 'http://api.staades.net/2.0/',
+    'baseUrl' => 'https://api.staades.com/2.0/',
     'operations' => array(
         'appIdentValuesGet' => array(
             'uri' => 'app/{app_key}/idents/{ident_key}/values',
